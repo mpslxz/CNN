@@ -132,5 +132,6 @@ class Network(object):
         for i in range(0,(imageSize[0] * imageSize[1]/self.mini_batch_size)):
             result[i*self.mini_batch_size:(i+1)*self.mini_batch_size] = predFcn(i)
         return result
+    
 def size(data):
     return data[0].get_value(borrow=True).shape[0]
