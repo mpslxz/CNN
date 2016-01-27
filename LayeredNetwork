@@ -117,7 +117,7 @@ class Network(object):
                                 test_accuracy))
 
         # Generating a log file to keep track of the accuracies
-        with open("log_balanced.txt","a") as logFile:
+        with open("Training Log.txt","a") as logFile:
             logFile.write("Finished training network " + time.strftime("%d/%m/%Y") + " at " + time.strftime("%H:%M:%S"))
             logFile.write("Best validation accuracy of {0:.2%} obtained at iteration {1}".format(
             best_validation_accuracy, best_iteration))
