@@ -2,6 +2,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 import time
+import pickle
 def linear(z): return z
 def ReLU(z): return T.maximum(0.0, z)
 from theano.tensor.nnet import sigmoid
@@ -118,7 +119,7 @@ class Network(object):
 
         # Generating a log file to keep track of the accuracies
         with open("Training Log.txt","a") as logFile:
-            logFile.write("Finished training network " + time.strftime("%d/%m/%Y") + " at " + time.strftime("%H:%M:%S"))
+            logFile.write(time.strftime("%d/%m/%Y") + ": Finished training network at " + time.strftime("%H:%M:%S"))
             logFile.write("Best validation accuracy of {0:.2%} obtained at iteration {1}".format(
             best_validation_accuracy, best_iteration))
             logFile.write("Corresponding test accuracy of {0:.2%}\n".format(test_accuracy))
@@ -132,6 +133,25 @@ class Network(object):
         for i in range(0,(imageSize[0] * imageSize[1]/self.mini_batch_size)):
             result[i*self.mini_batch_size:(i+1)*self.mini_batch_size] = predFcn(i)
         return result
-    
+
+    # Defining the save function to write the trained network on the HDD
+    def saveNet(self, path):
+        try:
+            netFile = file(path+".p", "w")
+            pickle.dump(netFile, self)
+        except pickle.PicklingError:
+            print "Error in saving the network."
+
+    # Defining the load function to load a pretrained network
+    def loadNet(self, path):
+        netFile = file(path,'rb')
+        try:
+            net = pickle.load(netFile)
+            return net
+        except pickle.UnpicklingError:
+            print "Error in loading the network."
+
+
+
 def size(data):
     return data[0].get_value(borrow=True).shape[0]
