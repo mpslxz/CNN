@@ -56,8 +56,8 @@ CNN = LayeredNetwork.Network([ConvolutionalLayer.ConvPoolLayer(         image_sh
                                                                         n_out           = 100,
                                                                         activation_fn   = FullyConnectedLayer.ReLU),
                               SoftmaxLayer.SoftmaxLayer(                n_in            = 100,
-                                                                        n_out           = 10),
-                              ], sizeOfMiniBatch)
+                                                                        n_out           = 10)]
+                              , sizeOfMiniBatch)
 
 CNN.SGD(trainingData,100,sizeOfMiniBatch, 0.02, validationData, testData, 0.02)
 
