@@ -23,6 +23,7 @@ class Network(object):
         self.x = T.matrix("x")
         self.y = T.ivector("y")
 
+        print "Building the model.\n"
         # Setting the initial layer
         init_layer = self.layers[0]
 
@@ -38,8 +39,17 @@ class Network(object):
         self.output_dropout = self.layers[-1].output_dropout
 
     # Defining the Stochastic Gradient Descent
+    # arguments:
+    #   training_data   : training dataset
+    #   validation_data : validation dataset
+    #   test_data       : test dataset
+    #   epochs          : number of training epochs
+    #   mini_batch_size : size of the training batch
+    #   eta             : learning rate
+    #   lmbd            : regularization parameter
+
     def SGD(self, training_data, epochs, mini_batch_size, eta,
-            validation_data, test_data, lmbda=0.0):
+            validation_data, test_data, lmbd=0.0):
 
         training_x, training_y = training_data
         validation_x, validation_y = validation_data
@@ -55,7 +65,7 @@ class Network(object):
 
         # Defining the cost function
         cost = self.layers[-1].cost(self)+\
-               0.5*lmbda*l2_norm_squared/num_training_batches
+               0.5*lmbd*l2_norm_squared/num_training_batches
 
         # Defining the symbolic gradient
         grads = T.grad(cost, self.params)
@@ -95,6 +105,8 @@ class Network(object):
             })
 
         # Calculating the SGD for all of the epochs
+
+        print "Training the model.\n"
         best_validation_accuracy = 0.0
         for epoch in xrange(epochs):
             for minibatch_index in xrange(num_training_batches):
@@ -118,9 +130,10 @@ class Network(object):
                                 test_accuracy))
 
         # Generating a log file to keep track of the accuracies
+        print "Finished training. Writing log file.\n"
         with open("Training Log.txt","a") as logFile:
-            logFile.write(time.strftime("%d/%m/%Y") + ": Finished training network at " + time.strftime("%H:%M:%S"))
-            logFile.write("Best validation accuracy of {0:.2%} obtained at iteration {1}".format(
+            logFile.write(time.strftime("%d/%m/%Y") + ": Finished training network at " + time.strftime("%H:%M:%S") + "\n")
+            logFile.write("Best validation accuracy of {0:.2%} obtained at iteration {1}\n".format(
             best_validation_accuracy, best_iteration))
             logFile.write("Corresponding test accuracy of {0:.2%}\n".format(test_accuracy))
 
@@ -134,24 +147,26 @@ class Network(object):
             result[i*self.mini_batch_size:(i+1)*self.mini_batch_size] = predFcn(i)
         return result
 
-    # Defining the save function to write the trained network on the HDD
-    def saveNet(self, path):
-        try:
-            netFile = file(path+".p", "w")
-            pickle.dump(netFile, self)
-        except pickle.PicklingError:
-            print "Error in saving the network."
 
-    # Defining the load function to load a pretrained network
-    def loadNet(self, path):
-        netFile = file(path,'rb')
-        try:
-            net = pickle.load(netFile)
-            return net
-        except pickle.UnpicklingError:
-            print "Error in loading the network."
+# Defining the save function to write the trained network on the HDD
+def saveNet(network, path):
+    print "Saving the model.\n"
+    try:
+        netFile = file(path+".p", "w")
+        pickle.dump(network, netFile)
+    except pickle.PicklingError:
+        print "Error in saving the network."
 
-
+# Defining the load function to load a pretrained network
+def loadNet(path):
+    print "Loading the model.\n"
+    netFile = file(path,'rb')
+    net = []
+    try:
+        net = pickle.load(netFile)
+    except pickle.UnpicklingError:
+        print "Error in loading the network."
+    return net
 
 def size(data):
     return data[0].get_value(borrow=True).shape[0]

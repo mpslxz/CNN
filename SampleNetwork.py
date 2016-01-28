@@ -59,6 +59,8 @@ CNN = LayeredNetwork.Network([ConvolutionalLayer.ConvPoolLayer(         image_sh
                                                                         n_out           = 10)]
                               , sizeOfMiniBatch)
 
-CNN.SGD(trainingData,100,sizeOfMiniBatch, 0.02, validationData, testData, 0.02)
+CNN.SGD(trainingData,10,sizeOfMiniBatch, 0.02, validationData, testData, 0.0)
 
-CNN.saveNet("sampleNet")
+LayeredNetwork.saveNet(CNN, 'sampleCNN')
+
+P = LayeredNetwork.loadNet("sampleCNN.p")
