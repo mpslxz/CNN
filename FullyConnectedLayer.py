@@ -4,7 +4,9 @@ import DropoutLayer
 import theano
 import theano.tensor as T
 
+
 def linear(z): return z
+def absolute(z): return abs(z)
 def ReLU(z): return T.maximum(0.0, z)
 from theano.tensor.nnet import sigmoid
 from theano.tensor import tanh

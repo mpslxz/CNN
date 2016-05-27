@@ -4,6 +4,7 @@ import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
 def linear(z): return z
+def absolute(z): return abs(z)
 def ReLU(z): return T.maximum(0.0, z)
 from theano.tensor.nnet import sigmoid
 from theano.tensor import tanh

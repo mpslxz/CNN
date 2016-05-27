@@ -47,20 +47,20 @@ sizeOfMiniBatch = 300
 CNN = LayeredNetwork.Network([ConvolutionalLayer.ConvPoolLayer(         image_shape     = (sizeOfMiniBatch, 1, 28, 28),
                                                                         filter_shape    = (20, 1, 5, 5),
                                                                         poolsize        = (2, 2),
-                                                                        activation_fn   = ConvolutionalLayer.ReLU),
+                                                                        activation_fn   = ConvolutionalLayer.absolute),
                               ConvolutionalLayer.ConvPoolLayer(         image_shape     = (sizeOfMiniBatch, 20, 12, 12),
                                                                         filter_shape    = (40, 20, 5, 5),
                                                                         poolsize        = (2, 2),
-                                                                        activation_fn   = ConvolutionalLayer.ReLU),
+                                                                        activation_fn   = ConvolutionalLayer.absolute),
                               FullyConnectedLayer.FullyConnectedLayer(  n_in            = 40*4*4,
                                                                         n_out           = 100,
-                                                                        activation_fn   = FullyConnectedLayer.ReLU),
+                                                                        activation_fn   = FullyConnectedLayer.absolute),
                               SoftmaxLayer.SoftmaxLayer(                n_in            = 100,
                                                                         n_out           = 10)]
                               , sizeOfMiniBatch)
 
 CNN.SGD(trainingData,10,sizeOfMiniBatch, 0.02, validationData, testData, 0.0)
 
-LayeredNetwork.saveNet(CNN, 'sampleCNN')
-
-P = LayeredNetwork.loadNet("sampleCNN.p")
+# LayeredNetwork.saveNet(CNN, 'sampleCNN')
+#
+# P = LayeredNetwork.loadNet("sampleCNN.p")
