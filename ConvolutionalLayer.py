@@ -23,13 +23,13 @@ from theano.tensor import tanh
 
 class ConvPoolLayer(object):
 
-    def __init__(self, filter_shape, image_shape, poolsize=(2, 2),
+    def __init__(self, filter_shape, image_shape, conv_type='valid',poolsize=(2, 2),
                  activation_fn=sigmoid):
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize
         self.activation_fn=activation_fn
-
+        self.border_mode = conv_type
         # initialize weights and biases from a normal distribution
 
         n_out = (filter_shape[0]*np.prod(filter_shape[2:])/np.prod(poolsize))
@@ -52,7 +52,7 @@ class ConvPoolLayer(object):
         # Convolving the input with the filters
         conv_out = conv.conv2d(
             input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
-            image_shape=self.image_shape)
+            image_shape=self.image_shape, border_mode=self.border_mode)
 
         # Down sampling with respective pooling size
         pooled_out = downsample.max_pool_2d(
