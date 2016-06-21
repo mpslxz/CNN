@@ -6,11 +6,6 @@ import theano.tensor as T
 import DropoutLayer
 from theano.tensor.nnet import softmax
 
-def linear(z): return z
-def ReLU(z): return T.maximum(0.0, z)
-from theano.tensor.nnet import sigmoid
-from theano.tensor import tanh
-
 
 #   Defining the fully-connected layer class.
 #   Class constructor:

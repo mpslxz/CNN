@@ -12,13 +12,12 @@
 
 
 import theano
-import cPickle, gzip
 import LayeredNetwork
 import FullyConnectedLayer
 import SoftmaxLayer
 import ConvolutionalLayer
-import MakeData
-
+import loadDataSets
+import activations
 
 # Setting the device
 GPU = True
@@ -33,35 +32,32 @@ else:
 print "\nRunning on " + theano.config.device + "...\n"
 
 # loading a sample dataset
-f = gzip.open('mnist.pkl.gz', 'rb')
-train_set, valid_set, test_set = cPickle.load(f)
-f.close()
 
-trainingData    = MakeData.shared(train_set)
-validationData  = MakeData.shared(valid_set)
-testData        = MakeData.shared(test_set)
+trainingData, validationData, testData = loadDataSets.loadMnist()
+
 
 # setting the mini_batch_size
+
 sizeOfMiniBatch = 300
 
 CNN = LayeredNetwork.Network([ConvolutionalLayer.ConvPoolLayer(         image_shape     = (sizeOfMiniBatch, 1, 28, 28),
                                                                         filter_shape    = (20, 1, 5, 5),
-                                                                        conv_type='full',
+                                                                        conv_type='valid',
                                                                         poolsize        = (2, 2),
-                                                                        activation_fn   = ConvolutionalLayer.absolute),
-                              ConvolutionalLayer.ConvPoolLayer(         image_shape     = (sizeOfMiniBatch, 20, 16, 16),
-                                                                        filter_shape    = (40, 20, 5, 5),
-                                                                        conv_type='full',
+                                                                        activation_fn   = activations.elu),
+                              ConvolutionalLayer.ConvPoolLayer(         image_shape     = (sizeOfMiniBatch, 20, 12, 12),
+                                                                        filter_shape    = (40, 20, 3, 3),
+                                                                        conv_type='valid',
                                                                         poolsize        = (2, 2),
-                                                                        activation_fn   = ConvolutionalLayer.absolute),
-                              FullyConnectedLayer.FullyConnectedLayer(  n_in            = 40*10*10,
-                                                                        n_out           = 100,
-                                                                        activation_fn   = FullyConnectedLayer.absolute),
-                              SoftmaxLayer.SoftmaxLayer(                n_in            = 100,
+                                                                        activation_fn   = activations.elu),
+                              FullyConnectedLayer.FullyConnectedLayer(  n_in            = 40*5*5,
+                                                                        n_out           = 1000,
+                                                                        activation_fn   = activations.absolute),
+                              SoftmaxLayer.SoftmaxLayer(                n_in            = 1000,
                                                                         n_out           = 10)]
                               , sizeOfMiniBatch)
 
-CNN.SGD(trainingData,10,sizeOfMiniBatch, 0.02, validationData, testData, 0.0)
+CNN.SGD(training_data=trainingData,validation_data=validationData, test_data=testData, mini_batch_size=sizeOfMiniBatch, epochs=20, eta=0.02, lmbd=0.0)
 
 # LayeredNetwork.saveNet(CNN, 'sampleCNN')
 #

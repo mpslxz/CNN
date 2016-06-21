@@ -3,10 +3,7 @@ import theano
 import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
-def linear(z): return z
-def absolute(z): return abs(z)
-def ReLU(z): return T.maximum(0.0, z)
-from theano.tensor.nnet import sigmoid
+import activations
 from theano.tensor import tanh
 
 #   Defining the convolutional-pooling layer class.
@@ -24,7 +21,7 @@ from theano.tensor import tanh
 class ConvPoolLayer(object):
 
     def __init__(self, filter_shape, image_shape, conv_type='valid',poolsize=(2, 2),
-                 activation_fn=sigmoid):
+                 activation_fn=activations.sigmoid):
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize
