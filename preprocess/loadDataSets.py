@@ -1,6 +1,10 @@
-from keras.datasets import mnist,cifar10, cifar100
-import cPickle, gzip
+import cPickle
+import gzip
+
+from keras.datasets import cifar100
+
 import MakeData
+
 
 def loadMnist():
     f = gzip.open('mnist.pkl.gz', 'rb')
@@ -17,7 +21,7 @@ def loadCifar100():
     X = X.reshape((X.shape[0], X.shape[1] * X.shape[2] * X.shape[3]))
     Y = Y.reshape((Y.shape[0],))
 
-    trainingData = MakeData.shared((X[0:40000,:], Y[0:40000]))
+    trainingData = MakeData.shared((X[0:40000, :], Y[0:40000]))
     validationData = MakeData.shared((X[40000:50000, :], Y[40000:50000]))
 
     X, Y = test_set
