@@ -1,5 +1,5 @@
 # pycharm files
-.idea/*
+.idea
 *.pyc
 
 # dataset file
