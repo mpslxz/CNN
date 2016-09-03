@@ -1,10 +1,10 @@
-
 import numpy as np
 
 import theano
 import theano.tensor as T
-import DropoutLayer
 from theano.tensor.nnet import softmax
+
+import CNN.core_layers.DropoutLayer
 
 
 #   Defining the fully-connected layer class.
@@ -34,7 +34,7 @@ class SoftmaxLayer(object):
         self.y_out = T.argmax(self.output, axis=1)
 
         # There is dropout in the output
-        self.inpt_dropout = DropoutLayer.dropout_layer(
+        self.inpt_dropout = CNN.core_layers.DropoutLayer.dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
         self.output_dropout = softmax(T.dot(self.inpt_dropout, self.w) + self.b)
 

@@ -1,10 +1,11 @@
 import numpy as np
+
 import theano
-import theano.tensor as T
 from theano.tensor.nnet import conv
 from theano.tensor.signal import downsample
-import activations
-from theano.tensor import tanh
+
+import CNN.utils.activations
+
 
 #   Defining the convolutional-pooling layer class.
 #   Class constructor:
@@ -20,8 +21,8 @@ from theano.tensor import tanh
 
 class ConvPoolLayer(object):
 
-    def __init__(self, filter_shape, image_shape, conv_type='valid',poolsize=(2, 2),
-                 activation_fn=activations.sigmoid):
+    def __init__(self, filter_shape, image_shape, conv_type='valid', poolsize=(2, 2),
+                 activation_fn=CNN.utils.activations.sigmoid):
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize
