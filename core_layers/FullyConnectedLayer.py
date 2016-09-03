@@ -1,9 +1,11 @@
-
 import numpy as np
-import DropoutLayer
+
 import theano
 import theano.tensor as T
-import activations
+
+import CNN.core_layers.DropoutLayer
+import CNN.utils.activations
+
 
 #   Defining the fully-connected layer class.
 #   Class constructor:
@@ -12,7 +14,7 @@ import activations
 
 class FullyConnectedLayer(object):
 
-    def __init__(self, n_in, n_out, activation_fn=activations.sigmoid, p_dropout=0.0):
+    def __init__(self, n_in, n_out, activation_fn=CNN.utils.activations.sigmoid, p_dropout=0.0):
         self.n_in = n_in
         self.n_out = n_out
         self.activation_fn = activation_fn
@@ -41,7 +43,7 @@ class FullyConnectedLayer(object):
         self.y_out = T.argmax(self.output, axis=1)
 
         # There is dropout in the output
-        self.inpt_dropout = DropoutLayer.dropout_layer(
+        self.inpt_dropout = CNN.core_layers.DropoutLayer.dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
 
         self.output_dropout = self.activation_fn(
