@@ -1,9 +1,6 @@
-# .pyc files
+# pycharm files
+.idea/*
 *.pyc
 
-# Pycharm idea
-.idea/*.*
-.idea
-
-# log files
-*.txt
+# dataset file
+*.pkl.gz
