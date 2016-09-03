@@ -3,11 +3,6 @@ import theano
 import theano.tensor as T
 import time
 import pickle
-def linear(z): return z
-def ReLU(z): return T.maximum(0.0, z)
-from theano.tensor.nnet import sigmoid
-from theano.tensor import tanh
-
 
 #   Main CNN class:
 #   Class constructor:
@@ -146,6 +141,9 @@ class Network(object):
         for i in range(0,(imageSize[0] * imageSize[1]/self.mini_batch_size)):
             result[i*self.mini_batch_size:(i+1)*self.mini_batch_size] = predFcn(i)
         return result
+
+    def get_layer_params(self, layer):
+        return [self.layers[layer].w.get_value(), self.layers[layer].b.get_value()]
 
 
 # Defining the save function to write the trained network on the HDD
