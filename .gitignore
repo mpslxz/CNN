@@ -1,9 +1,3 @@
-# .pyc files
+# pycharm files
+.idea/*
 *.pyc
-
-# Pycharm idea
-.idea/*.*
-.idea
-
-# log files
-*.txt
