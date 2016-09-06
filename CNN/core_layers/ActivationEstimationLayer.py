@@ -33,7 +33,7 @@ class DenseActivationLayer(object):
         inpt_shape = inpt.shape
         self.inpt = inpt.reshape((-1,1))
 
-        output = self.activation_fn(T.dot(self.activation_fn(T.dot(self.inpt, self.w_encode) + self.b), T.transpose(self.w_decode)))
+        output = T.dot(self.activation_fn(T.dot(self.inpt, self.w_encode) + self.b), T.transpose(self.w_decode))
         self.output = output.reshape(inpt_shape)
         self.output_dropout = self.output
 
@@ -56,7 +56,7 @@ class MergedDenseActivationLayer(object):
         inpt_shape = inpt.shape
         self.inpt = inpt.reshape((-1,1))
 
-        output = self.activation_fn(T.dot(self.activation_fn(T.dot(self.inpt, self.w) + self.b), T.transpose(self.w)))
+        output = T.dot(self.activation_fn(T.dot(self.inpt, self.w) + self.b), T.transpose(self.w))
         self.output = output.reshape(inpt_shape)
         self.output_dropout = self.output
 
