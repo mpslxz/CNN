@@ -14,6 +14,7 @@ import CNN.core_layers.DropoutLayer
 class SoftmaxLayer(object):
 
     def __init__(self, n_in, n_out, p_dropout=0.0):
+        self.trainable = True
         self.n_in = n_in
         self.n_out = n_out
         self.p_dropout = p_dropout
@@ -30,13 +31,11 @@ class SoftmaxLayer(object):
         self.inpt = inpt.reshape((mini_batch_size, self.n_in))
 
         # Output is masked by 1 - the probability of the dropout layer
-        self.output = softmax((1-self.p_dropout)*T.dot(self.inpt, self.w) + self.b)
+        self.output = softmax(T.dot(self.inpt, self.w) + self.b)
         self.y_out = T.argmax(self.output, axis=1)
 
-        # There is dropout in the output
-        self.inpt_dropout = CNN.core_layers.DropoutLayer.dropout_layer(
-            inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
-        self.output_dropout = softmax(T.dot(self.inpt_dropout, self.w) + self.b)
+
+        self.output_dropout = self.output
 
     def cost(self, net):
         # negative log-likelihood cost function

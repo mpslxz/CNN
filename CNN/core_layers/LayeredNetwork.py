@@ -14,7 +14,7 @@ class Network(object):
     def __init__(self, layers, mini_batch_size):
         self.layers = layers
         self.mini_batch_size = mini_batch_size
-        self.params = [param for layer in self.layers for param in layer.params]
+        self.params = [param for layer in self.layers for param in layer.params if param is not None]
         self.x = T.matrix("x")
         self.y = T.ivector("y")
 
@@ -56,7 +56,7 @@ class Network(object):
         num_test_batches = size(test_data)/mini_batch_size
 
         # Defining the l2 norm regularization
-        l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
+        l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers if layer.trainable == True])
 
         # Defining the cost function
         cost = self.layers[-1].cost(self)+\

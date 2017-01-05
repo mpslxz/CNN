@@ -23,6 +23,7 @@ class ConvPoolLayer(object):
 
     def __init__(self, filter_shape, image_shape, conv_type='valid', poolsize=(2, 2),
                  activation_fn=CNN.utils.activations.sigmoid):
+        self.trainable = True
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize

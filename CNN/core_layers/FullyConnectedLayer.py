@@ -15,6 +15,7 @@ import CNN.utils.activations
 class FullyConnectedLayer(object):
 
     def __init__(self, n_in, n_out, activation_fn=CNN.utils.activations.sigmoid, p_dropout=0.0):
+        self.trainable = True
         self.n_in = n_in
         self.n_out = n_out
         self.activation_fn = activation_fn
@@ -37,17 +38,12 @@ class FullyConnectedLayer(object):
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
         self.inpt = inpt.reshape((mini_batch_size, self.n_in))
 
-        # Output is masked by 1 - the probability of the dropout layer
-        self.output = self.activation_fn(
-            (1-self.p_dropout)*T.dot(self.inpt, self.w) + self.b)
+
+        self.output = self.activation_fn(T.dot(self.inpt, self.w) + self.b)
         self.y_out = T.argmax(self.output, axis=1)
 
-        # There is dropout in the output
-        self.inpt_dropout = CNN.core_layers.DropoutLayer.dropout_layer(
-            inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
-
-        self.output_dropout = self.activation_fn(
-            T.dot(self.inpt_dropout, self.w) + self.b)
+        # There is NO dropout in the output
+        self.output_dropout = self.output
 
     def accuracy(self, y):
         return T.mean(T.eq(y, self.y_out))

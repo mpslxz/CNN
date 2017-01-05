@@ -50,14 +50,14 @@ CNN = LayeredNetwork.Network([ConvPoolLayer(image_shape=(sizeOfMiniBatch, 1, 28,
                                             poolsize=(2, 2),
                                             activation_fn=activations.linear),
                               MergedDenseActivationLayer(n_hiddens_dense=10,
-                                                   activation_fn=activations.sigmoid),
+                                                   activation_fn=activations.elu),
                               ConvPoolLayer(image_shape=(sizeOfMiniBatch, 20, 12, 12),
                                             filter_shape=(40, 20, 3, 3),
                                             conv_type='valid',
                                             poolsize=(2, 2),
                                             activation_fn=activations.linear),
                               MergedDenseActivationLayer(n_hiddens_dense=10,
-                                                   activation_fn=activations.sigmoid),
+                                                   activation_fn=activations.elu),
                               FullyConnectedLayer(n_in=40 * 5 * 5,
                                                   n_out=1000,
                                                   activation_fn=activations.ReLU),
@@ -68,7 +68,7 @@ CNN = LayeredNetwork.Network([ConvPoolLayer(image_shape=(sizeOfMiniBatch, 1, 28,
                              sizeOfMiniBatch)
 
 
-CNN.SGD(training_data=trainingData,validation_data=validationData, test_data=testData, mini_batch_size=sizeOfMiniBatch, epochs=100, eta=0.02, lmbd=0.0)
+CNN.SGD(training_data=trainingData,validation_data=validationData, test_data=testData, mini_batch_size=sizeOfMiniBatch, epochs=200, eta=0.002, lmbd=0.0)
 w, b = Analyze.get_dense_activation_parameters(model=CNN)
 np.save('w', w)
 np.save('b', b)
