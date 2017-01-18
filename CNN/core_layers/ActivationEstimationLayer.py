@@ -14,6 +14,7 @@ class DenseActivationLayer(object):
     def __init__(self,n_hiddens_dense, activation_fn = sigmoid):
         self.n_hidden_dense = n_hiddens_dense
         self.activation_fn = activation_fn
+        self.trainable = True
         self.w_decode = theano.shared(np.array(np.random.normal(loc=0.0, scale=np.sqrt(1.0/n_hiddens_dense),
                                                          size=(1, n_hiddens_dense)),
                                         dtype=theano.config.floatX), name='w_decode', borrow=True)
@@ -42,6 +43,7 @@ class MergedDenseActivationLayer(object):
 
     def __init__(self,n_hiddens_dense, activation_fn = sigmoid):
         self.n_hidden_dense = n_hiddens_dense
+        self.trainable = True
         self.activation_fn = activation_fn
         self.w = theano.shared(np.array(np.random.normal(loc=0.0, scale=np.sqrt(1.0/n_hiddens_dense),
                                                          size=(1, n_hiddens_dense)),
