@@ -133,12 +133,13 @@ class Network(object):
             logFile.write("Corresponding test accuracy of {0:.2%}\n".format(test_accuracy))
 
     # Defining the predict function for later predictions
-    def predict(self, testData, imageSize):
+    def predict(self, testData):
         counter = T.lscalar()
         predFcn = theano.function([counter], self.layers[-1].y_out, givens={self.x: testData[counter*self.mini_batch_size:(counter+1)*self.mini_batch_size]})
-        result = np.zeros((imageSize[0] * imageSize[1]))
+        nb_samples = testData.shape.eval()[0]
+        result = np.zeros((nb_samples))
 
-        for i in range(0,(imageSize[0] * imageSize[1]/self.mini_batch_size)):
+        for i in range(0,(nb_samples/self.mini_batch_size)):
             result[i*self.mini_batch_size:(i+1)*self.mini_batch_size] = predFcn(i)
         return result
 
