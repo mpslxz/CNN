@@ -2,7 +2,7 @@ import numpy as np
 
 import theano
 from theano.tensor.nnet import conv
-from theano.tensor.signal import downsample
+from theano.tensor.signal.pool import pool_2d
 
 import CNN.utils.activations
 
@@ -54,8 +54,8 @@ class ConvPoolLayer(object):
             image_shape=self.image_shape, border_mode=self.border_mode)
 
         # Down sampling with respective pooling size
-        pooled_out = downsample.max_pool_2d(
-            input=conv_out, ds=self.poolsize, ignore_border=True)
+        pooled_out = pool_2d(
+            input=conv_out, ws=self.poolsize, ignore_border=True)
 
         # Calling the activation function with down sampled feature map as the input
 
